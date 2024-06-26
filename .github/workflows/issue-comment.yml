@@ -1,38 +1,39 @@
-on:
-  issue_comment:
-    types: [created]
-
-name: Add issues workflow labels
-
 jobs:
   add-label-if-is-author:
-    runs-on: ubuntu-latest
-    if: ${{ (github.event.issue.user.id == github.event.comment.user.id) && (!github.event.issue.pull_request) }}
+    if: ${{ (github.event.issue.user.id == github.event.comment.user.id) && (!github.event.issue.pull_request)
+      }}
+    runs-on: self-hosted
     steps:
-      - name: Add require handle label
-        uses: actions-cool/issues-helper@v2
-        with:
-          actions: 'add-labels'
-          labels: '状态:待处理'
-
-      - name: Remove require reply label
-        uses: actions-cool/issues-helper@v2
-        with:
-          actions: 'remove-labels'
-          labels: '状态:待用户反馈'
-
+    - continue-on-error: true
+      name: Add require handle label
+      uses: actions-cool/issues-helper@v2
+      with:
+        actions: add-labels
+        labels: "\u72B6\u6001:\u5F85\u5904\u7406"
+    - continue-on-error: true
+      name: Remove require reply label
+      uses: actions-cool/issues-helper@v2
+      with:
+        actions: remove-labels
+        labels: "\u72B6\u6001:\u5F85\u7528\u6237\u53CD\u9988"
   add-label-if-not-author:
-    runs-on: ubuntu-latest
-    if: ${{ (github.event.issue.user.id != github.event.comment.user.id) && (!github.event.issue.pull_request) && (github.event.issue.state == 'open') }}
+    if: ${{ (github.event.issue.user.id != github.event.comment.user.id) && (!github.event.issue.pull_request)
+      && (github.event.issue.state == 'open') }}
+    runs-on: self-hosted
     steps:
-      - name: Add require replay label
-        uses: actions-cool/issues-helper@v2
-        with:
-          actions: 'add-labels'
-          labels: '状态:待用户反馈'
-
-      - name: Remove require handle label
-        uses: actions-cool/issues-helper@v2
-        with:
-          actions: 'remove-labels'
-          labels: '状态:待处理'
+    - continue-on-error: true
+      name: Add require replay label
+      uses: actions-cool/issues-helper@v2
+      with:
+        actions: add-labels
+        labels: "\u72B6\u6001:\u5F85\u7528\u6237\u53CD\u9988"
+    - continue-on-error: true
+      name: Remove require handle label
+      uses: actions-cool/issues-helper@v2
+      with:
+        actions: remove-labels
+        labels: "\u72B6\u6001:\u5F85\u5904\u7406"
+name: Add issues workflow labels
+on:
+  repository_dispatch:
+    types: trigger-ga___issue-comment.yml

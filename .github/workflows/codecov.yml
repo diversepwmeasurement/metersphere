@@ -1,39 +1,30 @@
-on:
-  push:
-    branches:
-      - v3.*
-    paths:
-      - "backend/**"
-      - "pom.xml"
-  pull_request:
-    branches:
-      - v3.*
-    paths:
-      - "backend/**"
-      - "pom.xml"
-
-name: MeterSphere 覆盖率统计
-
-permissions:
-  pull-requests: write
-
 jobs:
   generic_handler:
-    name: 覆盖率统计
-    runs-on: ubuntu-latest
+    name: "\u8986\u76D6\u7387\u7EDF\u8BA1"
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 21
-          cache: 'maven'
-          cache-dependency-path: '**/pom.xml' # optional
-          check-latest: true
-      - name: Build with Maven - other
-        run: mvn -B package -DskipAntRunForJenkins --file pom.xml -pl '!frontend'
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+    - continue-on-error: true
+      uses: actions/checkout@v3
+    - continue-on-error: true
+      name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        cache: maven
+        cache-dependency-path: '**/pom.xml'
+        check-latest: true
+        distribution: zulu
+        java-version: 21
+    - continue-on-error: true
+      name: Build with Maven - other
+      run: mvn -B package -DskipAntRunForJenkins --file pom.xml -pl '!frontend'
+    - continue-on-error: true
+      name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+name: "MeterSphere \u8986\u76D6\u7387\u7EDF\u8BA1"
+on:
+  repository_dispatch:
+    types: trigger-ga___codecov.yml
+permissions:
+  pull-requests: write

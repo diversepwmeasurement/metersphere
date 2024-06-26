@@ -1,17 +1,18 @@
-on: pull_request
-
-name: MeterSphere 通用 PR 处理
-
-permissions:
-  pull-requests: write
-
 jobs:
   generic_handler:
-    name: 为 PR 添加标签
-    runs-on: ubuntu-latest
+    name: "\u4E3A PR \u6DFB\u52A0\u6807\u7B7E"
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-ecosystem/action-add-labels@v1
-        with:
-          github_token: ${{ secrets.GITHUBTOKEN }}
-          labels: ${{ github.base_ref }}
+    - continue-on-error: true
+      uses: actions/checkout@v3
+    - continue-on-error: true
+      uses: actions-ecosystem/action-add-labels@v1
+      with:
+        github_token: ${{ secrets.GITHUBTOKEN }}
+        labels: ${{ github.base_ref }}
+name: "MeterSphere \u901A\u7528 PR \u5904\u7406"
+on:
+  repository_dispatch:
+    types: trigger-ga___add-labels-for-pr.yml
+permissions:
+  pull-requests: write

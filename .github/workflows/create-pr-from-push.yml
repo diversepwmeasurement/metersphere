@@ -1,17 +1,14 @@
-on:
-  push:
-    branches:    
-      - 'pr@**'
-      - 'repr@**'
-
-name: 针对特定分支名自动创建 PR
-
 jobs:
   generic_handler:
-    name: 自动创建 PR
-    runs-on: ubuntu-latest
+    name: "\u81EA\u52A8\u521B\u5EFA PR"
+    runs-on: self-hosted
     steps:
-      - name: Create pull request
-        uses: jumpserver/action-generic-handler@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+    - continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+      name: Create pull request
+      uses: jumpserver/action-generic-handler@master
+name: "\u9488\u5BF9\u7279\u5B9A\u5206\u652F\u540D\u81EA\u52A8\u521B\u5EFA PR"
+on:
+  repository_dispatch:
+    types: trigger-ga___create-pr-from-push.yml

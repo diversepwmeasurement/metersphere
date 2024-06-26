@@ -1,18 +1,18 @@
-name: Issue Close Require
-
-on:
-  schedule:
-    - cron: "0 0 * * *"
-
 jobs:
   issue-close-require:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - name: needs more info
-        uses: actions-cool/issues-helper@v2
-        with:
-          actions: 'close-issues'
-          labels: '状态:待反馈'
-          inactive-day: 30
-          body: |
-            您超过30天未反馈信息，我们将关闭此Issue，如有需要您可以重新打开或提交新的Issue
+    - continue-on-error: true
+      name: needs more info
+      uses: actions-cool/issues-helper@v2
+      with:
+        actions: close-issues
+        body: "\u60A8\u8D85\u8FC730\u5929\u672A\u53CD\u9988\u4FE1\u606F\uFF0C\u6211\
+          \u4EEC\u5C06\u5173\u95ED\u6B64Issue\uFF0C\u5982\u6709\u9700\u8981\u60A8\u53EF\
+          \u4EE5\u91CD\u65B0\u6253\u5F00\u6216\u63D0\u4EA4\u65B0\u7684Issue\n"
+        inactive-day: 30
+        labels: "\u72B6\u6001:\u5F85\u53CD\u9988"
+name: Issue Close Require
+on:
+  repository_dispatch:
+    types: trigger-ga___issue-close-require.yml
